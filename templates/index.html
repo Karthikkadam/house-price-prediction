@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangalore House Price Prediction</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #ebf8ff, #e0e7ff);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin-top: 50px;
+    }
+    .prediction-box {
+      background-color: #ecfdf5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .btn-primary {
+      background-color: #3b82f6;
+      border-color: #3b82f6;
+      transition: transform 0.2s;
+    }
+    .btn-primary:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+    }
+    .form-group label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container bg-white shadow-lg rounded p-4">
+    <h2 class="text-center mb-4">Bangalore House Price Prediction</h2>
+    <p class="text-center text-muted mb-4">Get an estimate for your property value in Bangalore</p>
+
+    <form action="/predict" method="post">
+      <div class="row">
+        <!-- Area Type -->
+        <div class="col-md-6 form-group">
+          <label for="area_type">Area Type</label>
+          <select id="area_type" name="area_type" class="form-control" required>
+            <option value="Super built-up Area">Super built-up Area</option>
+            <option value="Built-up Area">Built-up Area</option>
+            <option value="Plot Area">Plot Area</option>
+            <option value="Carpet Area">Carpet Area</option>
+          </select>
+        </div>
+
+        <!-- Built-up Area -->
+        <div class="col-md-6 form-group">
+          <label for="area">Built-up Area (sq ft)</label>
+          <input type="number" id="area" name="area" class="form-control" required />
+        </div>
+
+        <!-- Availability -->
+        <div class="col-md-6 form-group">
+          <label for="availability">Availability</label>
+          <input type="text" id="availability" name="availability" class="form-control" required />
+        </div>
+
+        <!-- Location -->
+        <div class="col-md-6 form-group">
+          <label for="location">Location</label>
+          <select id="location" name="location" class="form-control" required>
+            <option value="Whitefield">Whitefield</option>
+            <option value="Electronic City">Electronic City</option>
+            <option value="JP Nagar">JP Nagar</option>
+            <option value="Bannerghatta Road">Bannerghatta Road</option>
+            <option value="HSR Layout">HSR Layout</option>
+            <option value="Marathahalli">Marathahalli</option>
+            <option value="Koramangala">Koramangala</option>
+            <option value="Indiranagar">Indiranagar</option>
+            <option value="Jayanagar">Jayanagar</option>
+            <option value="BTM Layout">BTM Layout</option>
+            <option value="Hebbal">Hebbal</option>
+            <option value="Sarjapur Road">Sarjapur Road</option>
+            <option value="Hennur">Hennur</option>
+            <option value="Yelahanka">Yelahanka</option>
+          </select>
+        </div>
+
+        <!-- Size -->
+        <div class="col-md-6 form-group">
+          <label for="size">Size</label>
+          <input type="text" id="size" name="size" class="form-control" required />
+        </div>
+
+        <!-- Society -->
+        <div class="col-md-6 form-group">
+          <label for="society">Society</label>
+          <input type="text" id="society" name="society" class="form-control" required />
+        </div>
+
+        <!-- Total Sqft -->
+        <div class="col-md-6 form-group">
+          <label for="total_sqft">Total Sqft</label>
+          <input type="number" id="total_sqft" name="total_sqft" class="form-control" required />
+        </div>
+
+        <!-- Number of Bathrooms -->
+        <div class="col-md-6 form-group">
+          <label for="bath">Number of Bathrooms</label>
+          <input type="number" id="bath" name="bath" class="form-control" min="1" max="6" required />
+        </div>
+
+        <!-- Number of Balconies -->
+        <div class="col-md-6 form-group">
+          <label for="balcony">Number of Balconies</label>
+          <input type="number" id="balcony" name="balcony" class="form-control" min="0" max="4" required />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary btn-block mt-4">Predict Price</button>
+    </form>
+
+    <!-- Predicted Price Display -->
+    {% if prediction_text %}
+    <div class="prediction-box">
+      <h4 class="text-success">Estimated Property Value</h4>
+      <p class="lead">₹{{ prediction_text }} Lakhs</p>
+      <small class="text-muted">* This is an estimated prediction based on current market trends in Bangalore.</small>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- jQuery and Autocomplete Script -->
+  <script>
+    // Define suggestions for each input
+    const suggestions = {
+      availability: ["Ready to Move", "Under Construction"],
+      size: ["2 BHK", "3 BHK", "4 BHK", "1 RK"],
+      society: ["Prestige", "Brigade", "Sobha", "Purva", "Godrej", "DLF"]
+    };
+
+    $(document).ready(function () {
+      // Enable autocomplete for fields with suggestions
+      $("#availability").autocomplete({ source: suggestions.availability });
+      $("#size").autocomplete({ source: suggestions.size });
+      $("#society").autocomplete({ source: suggestions.society });
+    });
+  </script>
+</body>
+</html>
