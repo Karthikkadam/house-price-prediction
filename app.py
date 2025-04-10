@@ -53,7 +53,7 @@ def suggestions():
         'area_type': data['area_type'].dropna().unique().tolist(),
         'availability': data['availability'].dropna().unique().tolist(),
         'location': data['location'].dropna().unique().tolist(),
-        'size': data['size'].dropna().unique().tolist(),
+        'size': ['1 Bedroom', '2 Bedroom', '3 Bedroom', '4 Bedroom'],
         'society': data['society'].dropna().unique().tolist()
     }
     
