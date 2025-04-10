@@ -35,6 +35,10 @@
     .form-group label {
       font-weight: 500;
     }
+    .dropdown-menu {
+      max-height: 300px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
@@ -48,56 +52,40 @@
         <div class="col-md-6 form-group">
           <label for="area_type">Area Type</label>
           <select id="area_type" name="area_type" class="form-control" required>
-            <option value="Super built-up Area">Super built-up Area</option>
-            <option value="Built-up Area">Built-up Area</option>
-            <option value="Plot Area">Plot Area</option>
-            <option value="Carpet Area">Carpet Area</option>
+            <option value="">Select Area Type</option>
           </select>
-        </div>
-
-        <!-- Built-up Area -->
-        <div class="col-md-6 form-group">
-          <label for="area">Built-up Area (sq ft)</label>
-          <input type="number" id="area" name="area" class="form-control" required />
         </div>
 
         <!-- Availability -->
         <div class="col-md-6 form-group">
           <label for="availability">Availability</label>
-          <input type="text" id="availability" name="availability" class="form-control" required />
+          <select id="availability" name="availability" class="form-control" required>
+            <option value="">Select Availability</option>
+          </select>
         </div>
 
         <!-- Location -->
         <div class="col-md-6 form-group">
           <label for="location">Location</label>
           <select id="location" name="location" class="form-control" required>
-            <option value="Whitefield">Whitefield</option>
-            <option value="Electronic City">Electronic City</option>
-            <option value="JP Nagar">JP Nagar</option>
-            <option value="Bannerghatta Road">Bannerghatta Road</option>
-            <option value="HSR Layout">HSR Layout</option>
-            <option value="Marathahalli">Marathahalli</option>
-            <option value="Koramangala">Koramangala</option>
-            <option value="Indiranagar">Indiranagar</option>
-            <option value="Jayanagar">Jayanagar</option>
-            <option value="BTM Layout">BTM Layout</option>
-            <option value="Hebbal">Hebbal</option>
-            <option value="Sarjapur Road">Sarjapur Road</option>
-            <option value="Hennur">Hennur</option>
-            <option value="Yelahanka">Yelahanka</option>
+            <option value="">Select Location</option>
           </select>
         </div>
 
         <!-- Size -->
         <div class="col-md-6 form-group">
           <label for="size">Size</label>
-          <input type="text" id="size" name="size" class="form-control" required />
+          <select id="size" name="size" class="form-control" required>
+            <option value="">Select Size</option>
+          </select>
         </div>
 
         <!-- Society -->
         <div class="col-md-6 form-group">
           <label for="society">Society</label>
-          <input type="text" id="society" name="society" class="form-control" required />
+          <select id="society" name="society" class="form-control" required>
+            <option value="">Select Society</option>
+          </select>
         </div>
 
         <!-- Total Sqft -->
@@ -127,26 +115,45 @@
     {% if prediction_text %}
     <div class="prediction-box">
       <h4 class="text-success">Estimated Property Value</h4>
-      <p class="lead">₹{{ prediction_text }} Lakhs</p>
+      <p class="lead">{{ prediction_text }}</p>
       <small class="text-muted">* This is an estimated prediction based on current market trends in Bangalore.</small>
     </div>
     {% endif %}
   </div>
 
-  <!-- jQuery and Autocomplete Script -->
+  <!-- Load dropdown data script -->
   <script>
-    // Define suggestions for each input
-    const suggestions = {
-      availability: ["Ready to Move", "Under Construction"],
-      size: ["2 BHK", "3 BHK", "4 BHK", "1 RK"],
-      society: ["Prestige", "Brigade", "Sobha", "Purva", "Godrej", "DLF"]
-    };
-
     $(document).ready(function () {
-      // Enable autocomplete for fields with suggestions
-      $("#availability").autocomplete({ source: suggestions.availability });
-      $("#size").autocomplete({ source: suggestions.size });
-      $("#society").autocomplete({ source: suggestions.society });
+      // Fetch data for all dropdown menus
+      $.ajax({
+        url: '/suggestions',
+        method: 'GET',
+        data: { query: '' },
+        success: function(data) {
+          // Populate area_type dropdown
+          populateDropdown('area_type', data.area_type);
+          
+          // Populate availability dropdown
+          populateDropdown('availability', data.availability);
+          
+          // Populate location dropdown
+          populateDropdown('location', data.location);
+          
+          // Populate size dropdown
+          populateDropdown('size', data.size);
+          
+          // Populate society dropdown
+          populateDropdown('society', data.society);
+        }
+      });
+      
+      // Function to populate dropdown options
+      function populateDropdown(elementId, options) {
+        const dropdown = $('#' + elementId);
+        options.forEach(function(option) {
+          dropdown.append($('<option></option>').attr('value', option).text(option));
+        });
+      }
     });
   </script>
 </body>
