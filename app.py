@@ -43,7 +43,6 @@ def predict():
 
     return render_template('index.html', prediction_text=f'Estimated House Price: ₹{prediction:.2f} Lakhs')
 
-
 @app.route('/suggestions', methods=['GET'])
 def suggestions():
     query = request.args.get('query', '')
@@ -70,4 +69,4 @@ def suggestions():
         return jsonify(limited_suggestions)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
